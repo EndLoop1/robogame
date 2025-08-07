@@ -1,0 +1,27 @@
+--cpu Cortex-M3
+"robogame\startup_stm32f103xe.o"
+"robogame\motor.o"
+"robogame\main.o"
+"robogame\gpio.o"
+"robogame\tim.o"
+"robogame\stm32f1xx_it.o"
+"robogame\stm32f1xx_hal_msp.o"
+"robogame\pid.o"
+"robogame\stm32f1xx_hal_gpio_ex.o"
+"robogame\stm32f1xx_hal_tim.o"
+"robogame\stm32f1xx_hal_tim_ex.o"
+"robogame\stm32f1xx_hal.o"
+"robogame\stm32f1xx_hal_rcc.o"
+"robogame\stm32f1xx_hal_rcc_ex.o"
+"robogame\stm32f1xx_hal_gpio.o"
+"robogame\stm32f1xx_hal_dma.o"
+"robogame\stm32f1xx_hal_cortex.o"
+"robogame\stm32f1xx_hal_pwr.o"
+"robogame\stm32f1xx_hal_flash.o"
+"robogame\stm32f1xx_hal_flash_ex.o"
+"robogame\stm32f1xx_hal_exti.o"
+"robogame\system_stm32f1xx.o"
+--strict --scatter "robogame\robogame.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "robogame.map" -o robogame\robogame.axf
