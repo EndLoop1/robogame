@@ -474,9 +474,9 @@
               <FilePath>../Core/Src/stm32f1xx_hal_msp.c</FilePath>
             </File>
             <File>
-              <FileName>PID.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\user\PID.cpp</FilePath>
+              <FileName>pid.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\user\pid.c</FilePath>
             </File>
           </Files>
         </Group>

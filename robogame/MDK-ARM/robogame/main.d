@@ -30,3 +30,4 @@ robogame\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h
 robogame\main.o: ../Core/Inc/tim.h
 robogame\main.o: ../Core/Inc/gpio.h
 robogame\main.o: ./user/motor.h
+robogame\main.o: ./user/pid.h

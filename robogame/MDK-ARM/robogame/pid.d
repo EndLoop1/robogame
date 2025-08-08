@@ -1,5 +1,5 @@
-robogame\pid.o: user\PID.cpp
-robogame\pid.o: user\PID.hpp
+robogame\pid.o: user\pid.c
+robogame\pid.o: user\pid.h
 robogame\pid.o: ../Core/Inc/main.h
 robogame\pid.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h
 robogame\pid.o: ../Core/Inc/stm32f1xx_hal_conf.h
@@ -28,4 +28,3 @@ robogame\pid.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h
 robogame\pid.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h
 robogame\pid.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h
 robogame\pid.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h
-robogame\pid.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\limits.h
