@@ -30,9 +30,9 @@
 #define MOTOR4_DIR2_PIN GPIO_PIN_7
 
 #define MOTOR_NUM 4
-#define PWM_MAX 1000
-#define ENCODER_PPR 1000       // ������������ÿת
-#define COUNTER_MAX 0xFFFF     // 16λ���������ֵ
+#define PWM_MAX 3599
+#define ENCODER_PPR 1000       
+#define COUNTER_MAX 0xFFFF     
 
 /* Exported types ------------------------------------------------------------*/
 typedef enum {

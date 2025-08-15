@@ -115,14 +115,40 @@ int main(void)
   HAL_TIM_Encoder_Start(&htim4, TIM_CHANNEL_1 | TIM_CHANNEL_2);
   HAL_TIM_Encoder_Start(&htim5, TIM_CHANNEL_1 | TIM_CHANNEL_2);
 
+  /*
+  HAL_GPIO_WritePin(MOTOR_DIR_GPIO_PORT, MOTOR1_DIR1_PIN, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(MOTOR_DIR_GPIO_PORT, MOTOR1_DIR2_PIN, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(MOTOR_DIR_GPIO_PORT, MOTOR2_DIR1_PIN, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(MOTOR_DIR_GPIO_PORT, MOTOR2_DIR2_PIN, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(MOTOR_DIR_GPIO_PORT, MOTOR3_DIR1_PIN, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(MOTOR_DIR_GPIO_PORT, MOTOR3_DIR2_PIN, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(MOTOR_DIR_GPIO_PORT, MOTOR4_DIR1_PIN, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(MOTOR_DIR_GPIO_PORT, MOTOR4_DIR2_PIN, GPIO_PIN_SET);
+  
+
+  MotorControl_SetTargetSpeed(0,500.0f);
+  MotorControl_SetTargetSpeed(1,500.0f);
+  MotorControl_SetTargetSpeed(2,500.0f);
+  MotorControl_SetTargetSpeed(3,500.0f);
+  */
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		HAL_Delay(1);
-    MotorControl_Update();
+		/*HAL_Delay(1);
+    MotorControl_Update();*/
+
+    //测试代码
+    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, PWM_MAX / 2); // 50% 占空比
+    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, 0);
+    HAL_Delay(3000);
+
+    // 停车
+    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 0);
+    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, 0);
+    HAL_Delay(2000);
 
     /* USER CODE END WHILE */
 

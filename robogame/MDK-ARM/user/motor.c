@@ -75,27 +75,79 @@ static void SetMotorDirection(uint8_t motor_id, MotorDirection dir)
 }
 
 // 设置PWM占空比（0~PWM_MAX）
-static void SetMotorPWM(uint8_t motor_id, uint16_t pwm) 
+static void SetMotorPWM(uint8_t motor_id, uint16_t pwm, MotorDirection dir) 
 {
     if (pwm > PWM_MAX) pwm = PWM_MAX;
 
     switch(motor_id) 
     {
         case 0:
-            __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, pwm);
-            __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, pwm);
+            if (dir == MOTOR_DIR_FORWARD) 
+            {
+                __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, pwm); // RPWM
+                __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, 0);   // LPWM
+            } 
+            else if (dir == MOTOR_DIR_BACKWARD) 
+            {
+                __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 0);
+                __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, pwm);
+            } 
+            else 
+            { // STOP
+                __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 0);
+                __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, 0);
+            }
             break;
         case 1:
-            __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_3, pwm);
-            __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_4, pwm);
+            if (dir == MOTOR_DIR_FORWARD) 
+            {
+                __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_3, pwm); // RPWM
+                __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_4, 0);   // LPWM
+            } 
+            else if (dir == MOTOR_DIR_BACKWARD) 
+            {
+                __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_3, 0);
+                __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_4, pwm);
+            } 
+            else 
+            { // STOP
+                __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_3, 0);
+                __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_4, 0);
+            }
             break;
         case 2:
-            __HAL_TIM_SET_COMPARE(&htim8, TIM_CHANNEL_1, pwm);
-            __HAL_TIM_SET_COMPARE(&htim8, TIM_CHANNEL_2, pwm);
+            if (dir == MOTOR_DIR_FORWARD) 
+            {
+                __HAL_TIM_SET_COMPARE(&htim8, TIM_CHANNEL_1, pwm); // RPWM
+                __HAL_TIM_SET_COMPARE(&htim8, TIM_CHANNEL_2, 0);   // LPWM
+            } 
+            else if (dir == MOTOR_DIR_BACKWARD) 
+            {
+                __HAL_TIM_SET_COMPARE(&htim8, TIM_CHANNEL_1, 0);
+                __HAL_TIM_SET_COMPARE(&htim8, TIM_CHANNEL_2, pwm);
+            } 
+            else 
+            { // STOP
+                __HAL_TIM_SET_COMPARE(&htim8, TIM_CHANNEL_1, 0);
+                __HAL_TIM_SET_COMPARE(&htim8, TIM_CHANNEL_2, 0);
+            }
             break;
         case 3:
-            __HAL_TIM_SET_COMPARE(&htim8, TIM_CHANNEL_3, pwm);
-            __HAL_TIM_SET_COMPARE(&htim8, TIM_CHANNEL_4, pwm);
+            if (dir == MOTOR_DIR_FORWARD) 
+            {
+                __HAL_TIM_SET_COMPARE(&htim8, TIM_CHANNEL_3, pwm); // RPWM
+                __HAL_TIM_SET_COMPARE(&htim8, TIM_CHANNEL_4, 0);   // LPWM
+            } 
+            else if (dir == MOTOR_DIR_BACKWARD) 
+            {
+                __HAL_TIM_SET_COMPARE(&htim8, TIM_CHANNEL_3, 0);
+                __HAL_TIM_SET_COMPARE(&htim8, TIM_CHANNEL_4, pwm);
+            } 
+            else 
+            { // STOP
+                __HAL_TIM_SET_COMPARE(&htim8, TIM_CHANNEL_3, 0);
+                __HAL_TIM_SET_COMPARE(&htim8, TIM_CHANNEL_4, 0);
+            }
             break;
         default:
             break;
@@ -139,36 +191,42 @@ void MotorControl_Update(void)
 
     for (int i = 0; i < MOTOR_NUM; i++) 
     {
+        // 编码器差值
         int32_t current_count = GetEncoderCount(i);
-        int32_t last_count = motors[i].last_encoder_count;
+        int32_t diff = current_count - motors[i].last_encoder_count;
 
-        int32_t diff = current_count - last_count;
-        if (diff > (COUNTER_MAX / 2)) diff -= (COUNTER_MAX + 1);
-        else if (diff < -(COUNTER_MAX / 2)) diff += (COUNTER_MAX + 1);
+        if (diff > (COUNTER_MAX / 2)) 
+            diff -= (COUNTER_MAX + 1);
+        else if (diff < -(COUNTER_MAX / 2)) 
+            diff += (COUNTER_MAX + 1);
 
         motors[i].last_encoder_count = current_count;
 
+        // 当前速度
         float speed = CalculateSpeedRPM(diff, dt_s);
 
-        float pid_output = PID_Compute(&motorPID[i], speed);
+        // PID 计算（目标值用绝对值，方向单独判断）
+        float pid_output = PID_Compute(&motorPID[i], fabsf(speed));
 
-        // 设置方向
+        // 确定方向
+        MotorDirection dir;
         if (motors[i].target_speed_rpm > 0) 
         {
-            motors[i].direction = MOTOR_DIR_FORWARD;
+            dir = MOTOR_DIR_FORWARD;
         } 
         else if (motors[i].target_speed_rpm < 0) 
         {
-            motors[i].direction = MOTOR_DIR_BACKWARD;
+            dir = MOTOR_DIR_BACKWARD;
         } 
         else 
         {
-            motors[i].direction = MOTOR_DIR_STOP;
+            dir = MOTOR_DIR_STOP;
             pid_output = 0;
         }
+        motors[i].direction = dir;
 
-        SetMotorDirection(i, motors[i].direction);
-        SetMotorPWM(i, (uint16_t)pid_output);
+        // 直接调用统一的 IBT-2 PWM 输出
+        SetMotorPWM(i, (uint16_t)pid_output, dir);
     }
 }
 
