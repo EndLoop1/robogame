@@ -230,24 +230,66 @@ void MotorControl_Update(void)
     }
 }
 
-void MotorControl_Forward(void)
+void MotorControl_SetVelocityVector(float Vx, float Vy, float Omega)
 {
+    // 轮子参数（米）
+    const float r = 0.03f;   // 轮半径 3cm
+    const float Lx = 0.08f;  // 前后轮中心到质心距离
+    const float Ly = 0.08f;  // 左右轮中心到质心距离
 
+    // 计算四个轮子目标速度（单位 RPM）
+    float rpm0 = ((Vx - Vy - (Lx+Ly)*Omega) / (2.0f * 3.1415926f * r)) * 60.0f; // 前左
+    float rpm1 = ((Vx + Vy + (Lx+Ly)*Omega) / (2.0f * 3.1415926f * r)) * 60.0f; // 前右
+    float rpm2 = ((Vx - Vy + (Lx+Ly)*Omega) / (2.0f * 3.1415926f * r)) * 60.0f; // 后右
+    float rpm3 = ((Vx + Vy - (Lx+Ly)*Omega) / (2.0f * 3.1415926f * r)) * 60.0f; // 后左
+
+    // 设置四个电机目标速度
+    MotorControl_SetTargetSpeed(0, rpm0);
+    MotorControl_SetTargetSpeed(1, rpm1);
+    MotorControl_SetTargetSpeed(2, rpm2);
+    MotorControl_SetTargetSpeed(3, rpm3);
 }
 
-void MotorControl_Backward(void)
+// 前进，speed_m_s 为线速度，单位 m/s
+void MotorControl_Forward(float speed_m_s)
 {
-
+    MotorControl_SetVelocityVector(speed_m_s, 0.0f, 0.0f);
 }
 
+// 后退，speed_m_s 为线速度，单位 m/s
+void MotorControl_Backward(float speed_m_s)
+{
+    MotorControl_SetVelocityVector(-speed_m_s, 0.0f, 0.0f);
+}
+
+// 左平移，speed_m_s 为线速度，单位 m/s
+void MotorControl_Left(float speed_m_s)
+{
+    MotorControl_SetVelocityVector(0.0f, -speed_m_s, 0.0f);
+}
+
+// 右平移，speed_m_s 为线速度，单位 m/s
+void MotorControl_Right(float speed_m_s)
+{
+    MotorControl_SetVelocityVector(0.0f, speed_m_s, 0.0f);
+}
+
+// 顺时针原地旋转，omega_rad_s 单位 rad/s
+void MotorControl_RotateCW(float omega_rad_s)
+{
+    MotorControl_SetVelocityVector(0.0f, 0.0f, omega_rad_s);
+}
+
+// 逆时针原地旋转
+void MotorControl_RotateCCW(float omega_rad_s)
+{
+    MotorControl_SetVelocityVector(0.0f, 0.0f, -omega_rad_s);
+}
+
+// 停止
 void MotorControl_Stop(void)
 {
-
-}
-
-void MotorControl_Rotate(void)
-{
-
+    MotorControl_SetVelocityVector(0.0f, 0.0f, 0.0f);
 }
 
 /************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/

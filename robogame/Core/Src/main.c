@@ -53,7 +53,9 @@ int counter;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
+
 void SystemClock_Config(void);
+
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -125,7 +127,6 @@ int main(void)
   HAL_GPIO_WritePin(MOTOR_DIR_GPIO_PORT, MOTOR4_DIR1_PIN, GPIO_PIN_SET);
   HAL_GPIO_WritePin(MOTOR_DIR_GPIO_PORT, MOTOR4_DIR2_PIN, GPIO_PIN_SET);
   
-
   MotorControl_SetTargetSpeed(0,500.0f);
   MotorControl_SetTargetSpeed(1,500.0f);
   MotorControl_SetTargetSpeed(2,500.0f);
@@ -137,10 +138,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		/*HAL_Delay(1);
-    MotorControl_Update();*/
-
-    //测试代码
+    //测试PWM代码
     __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, PWM_MAX / 2); // 50% 占空比
     __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, 0);
     HAL_Delay(3000);
@@ -149,6 +147,41 @@ int main(void)
     __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 0);
     __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, 0);
     HAL_Delay(2000);
+
+
+    /*
+    // 前进 0.2 m/s
+    MotorControl_Forward(0.2f);
+    for(int i=0;i<3000;i++)
+    { 
+      MotorControl_Update(); 
+      HAL_Delay(1); 
+    }
+
+    // 右移 0.1 m/s
+    MotorControl_Right(0.1f);
+    for(int i=0;i<3000;i++)
+    { 
+      MotorControl_Update(); 
+      HAL_Delay(1); 
+    }
+
+    // 顺时针旋转 1 rad/s
+    MotorControl_RotateCW(1.0f);
+    for(int i=0;i<3000;i++)
+    { 
+      MotorControl_Update(); 
+      HAL_Delay(1); 
+    }
+
+    // 停止
+    MotorControl_Stop();
+    for(int i=0;i<2000;i++)
+    { 
+      MotorControl_Update(); 
+      HAL_Delay(1); 
+    }
+    */
 
     /* USER CODE END WHILE */
 

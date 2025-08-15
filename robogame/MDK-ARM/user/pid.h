@@ -25,23 +25,23 @@ typedef struct
     float Ki;
     float Kd;
 
-    float setpoint;      // Ä¿±êÖµ
-    float integral;      // »ý·ÖÏîÀÛ»ý
-    float last_error;    // ÉÏ´ÎÎó²î
+    float setpoint;      // Ä¿ï¿½ï¿½Öµ
+    float integral;      // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Û»ï¿½
+    float last_error;    // ï¿½Ï´ï¿½ï¿½ï¿½ï¿½
 
-    float output_max;    // Êä³ö×î´óÖµÏÞÖÆ
-    float output_min;    // Êä³ö×îÐ¡ÖµÏÞÖÆ
+    float output_max;    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½
+    float output_min;    // ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡Öµï¿½ï¿½ï¿½ï¿½
 
-    float dt;            // ²ÉÑùÖÜÆÚ£¬µ¥Î»Ãë
+    float dt;            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú£ï¿½ï¿½ï¿½Î»ï¿½ï¿½
 } PID_HandleTypeDef;
 
 /* Exported function declarations --------------------------------------------*/
 
-// ³õÊ¼»¯PID½á¹¹Ìå
+// ï¿½ï¿½Ê¼ï¿½ï¿½PIDï¿½á¹¹ï¿½ï¿½
 void PID_Init(PID_HandleTypeDef *pid, float Kp, float Ki, float Kd, float dt, float output_min, float output_max);
-// ¼ÆËãPIDÊä³ö
+// ï¿½ï¿½ï¿½ï¿½PIDï¿½ï¿½ï¿½
 float PID_Compute(PID_HandleTypeDef *pid, float measurement);
-// ÖØÖÃPID×´Ì¬
+// ï¿½ï¿½ï¿½ï¿½PID×´Ì¬
 void PID_Reset(PID_HandleTypeDef *pid);
 
 #endif

@@ -48,10 +48,15 @@ typedef enum {
 void MotorControl_Init(void);
 void MotorControl_SetTargetSpeed(uint8_t motor_id, float speed_rpm);
 void MotorControl_Update(void);
-void MotorControl_Forward(void);
-void MotorControl_Backward(void);
+void MotorControl_SetVelocityVector(float Vx, float Vy, float Omega);
+void MotorControl_Forward(float speed_m_s);
+void MotorControl_Backward(float speed_m_s);
+void MotorControl_Left(float speed_m_s);
+void MotorControl_Right(float speed_m_s);
+void MotorControl_RotateCW(float omega_rad_s);
+void MotorControl_RotateCCW(float omega_rad_s);
 void MotorControl_Stop(void);
-void MotorControl_Rotate(void);
+
 
 #endif
 
