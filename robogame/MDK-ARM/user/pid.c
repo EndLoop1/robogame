@@ -44,7 +44,6 @@ float PID_Compute(PID_HandleTypeDef *pid, float measurement)
 
     float output = pid->Kp * error + pid->Ki * pid->integral + pid->Kd * derivative;
 
-    // �޷�
     if (output > pid->output_max)
         output = pid->output_max;
     else if (output < pid->output_min)

@@ -25,23 +25,20 @@ typedef struct
     float Ki;
     float Kd;
 
-    float setpoint;      // Ŀ��ֵ
-    float integral;      // �������ۻ�
-    float last_error;    // �ϴ����
+    float setpoint;      
+    float integral;      
+    float last_error;   
 
-    float output_max;    // ������ֵ����
-    float output_min;    // �����Сֵ����
+    float output_max;    
+    float output_min;   
 
-    float dt;            // �������ڣ���λ��
+    float dt;            
 } PID_HandleTypeDef;
 
 /* Exported function declarations --------------------------------------------*/
 
-// ��ʼ��PID�ṹ��
 void PID_Init(PID_HandleTypeDef *pid, float Kp, float Ki, float Kd, float dt, float output_min, float output_max);
-// ����PID���
 float PID_Compute(PID_HandleTypeDef *pid, float measurement);
-// ����PID״̬
 void PID_Reset(PID_HandleTypeDef *pid);
 
 #endif

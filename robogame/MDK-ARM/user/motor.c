@@ -233,9 +233,9 @@ void MotorControl_Update(void)
 void MotorControl_SetVelocityVector(float Vx, float Vy, float Omega)
 {
     // 轮子参数（米）
-    const float r = 0.03f;   // 轮半径 3cm
-    const float Lx = 0.08f;  // 前后轮中心到质心距离
-    const float Ly = 0.08f;  // 左右轮中心到质心距离
+    const float r = 0.04f;   // 轮半径 4cm
+    const float Lx = 0.15f;  // 前后轮中心到质心距离
+    const float Ly = 0.20f;  // 左右轮中心到质心距离
 
     // 计算四个轮子目标速度（单位 RPM）
     float rpm0 = ((Vx - Vy - (Lx+Ly)*Omega) / (2.0f * 3.1415926f * r)) * 60.0f; // 前左

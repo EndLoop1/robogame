@@ -25,6 +25,7 @@
 /* USER CODE BEGIN Includes */
 #include "motor.h"
 #include "pid.h"
+#include "stepmotor.h"
 
 /* USER CODE END Includes */
 
@@ -82,6 +83,8 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
+  StepMotor_Init();      // 初始化步进电机GPIO
+  MotorControl_Init();
 
   /* USER CODE END Init */
 
@@ -102,7 +105,6 @@ int main(void)
   MX_TIM8_Init();
   /* USER CODE BEGIN 2 */
 	
-  MotorControl_Init();
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
@@ -117,7 +119,6 @@ int main(void)
   HAL_TIM_Encoder_Start(&htim4, TIM_CHANNEL_1 | TIM_CHANNEL_2);
   HAL_TIM_Encoder_Start(&htim5, TIM_CHANNEL_1 | TIM_CHANNEL_2);
 
-  /*
   HAL_GPIO_WritePin(MOTOR_DIR_GPIO_PORT, MOTOR1_DIR1_PIN, GPIO_PIN_SET);
   HAL_GPIO_WritePin(MOTOR_DIR_GPIO_PORT, MOTOR1_DIR2_PIN, GPIO_PIN_SET);
   HAL_GPIO_WritePin(MOTOR_DIR_GPIO_PORT, MOTOR2_DIR1_PIN, GPIO_PIN_SET);
@@ -127,28 +128,27 @@ int main(void)
   HAL_GPIO_WritePin(MOTOR_DIR_GPIO_PORT, MOTOR4_DIR1_PIN, GPIO_PIN_SET);
   HAL_GPIO_WritePin(MOTOR_DIR_GPIO_PORT, MOTOR4_DIR2_PIN, GPIO_PIN_SET);
   
+  /*
   MotorControl_SetTargetSpeed(0,500.0f);
   MotorControl_SetTargetSpeed(1,500.0f);
   MotorControl_SetTargetSpeed(2,500.0f);
   MotorControl_SetTargetSpeed(3,500.0f);
   */
+
+  // 设置方向
+  StepMotor_SetDir(STEPMOTOR_DIR_CW);
+  // 需要的脉冲数 = 20000 (对应 50mm)
+  uint32_t steps = 20000;
+  // 发出脉冲
+  StepMotor_Step(steps, 500);  
+  // 第二个参数是延时，单位 us，500us ≈ 2kHz，速度可调
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    //测试PWM代码
-    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, PWM_MAX / 2); // 50% 占空比
-    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, 0);
-    HAL_Delay(3000);
-
-    // 停车
-    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 0);
-    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, 0);
-    HAL_Delay(2000);
-
-
     /*
     // 前进 0.2 m/s
     MotorControl_Forward(0.2f);

@@ -400,6 +400,11 @@
               <FilePath>.\user\pid.c</FilePath>
             </File>
             <File>
+              <FileName>stepmotor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\user\stepmotor.c</FilePath>
+            </File>
+            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Core/Src/main.c</FilePath>
